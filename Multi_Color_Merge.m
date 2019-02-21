@@ -93,7 +93,7 @@ global color1;
 global color2;
 global color3;
 global ThreeD;
-color1.IMG = zeros(10,10);
+% color1.IMG = zeros(10,10);
 color1.gain = 1;
 color2.gain = 1;
 color3.gain= 1;
@@ -312,15 +312,15 @@ global displaying
 global inputFileName
 global inputFilePath
 n=1;
-[inputFileName.c1,  inputFilePath.c1, gfindex] = uigetfile({'*.*',  'All files'}, 'Select data file', '..\Data\Raw\');
-
+[inputFileName.c1,  inputFilePath.c1, gfindex] = uigetfile({'*.*',  'All files'}, 'Select data file', '.\Data\');
 
 if gfindex==0
     inputFilePath.c1 = '';
     inputFileName.c1 = '';
 %     flage=0;
 end
-if ~exist([inputFileName.c1 ])==0
+
+if ~exist([inputFileName.c1 ])==1
     set(handles.color1_name,'visible','on');
     set(handles.color1_name,'String',[inputFilePath.c1, inputFileName.c1]);
     if (ThreeD)
@@ -328,8 +328,8 @@ if ~exist([inputFileName.c1 ])==0
         disp= IMG;
         displaying.c1=MIP(disp);
     else
-        color1.IMG=imreadTiff([inputFilePath.c1, inputFileName.c1]);
-        disp= color1.IMG;
+        IMG=imreadTiff([inputFilePath.c1, inputFileName.c1]);
+        disp= IMG;
         displaying.c1=disp(:,:,n);
     end
     displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
@@ -352,18 +352,18 @@ global displaying
 global inputFileName
 global inputFilePath
 n=1;
-[inputFileName.c2,  inputFilePath.c2, gfindex] = uigetfile({'*.*',  'All files'}, 'Select data file', '..\Data\Raw\');
+[inputFileName.c2,  inputFilePath.c2, gfindex] = uigetfile({'*.*',  'All files'}, 'Select data file', '.\Data\');
 
 if gfindex==0
     inputFilePath.c2 = '';
     inputFileName.c2 = '';
 end
-if ~exist([inputFileName.c2 ])==0
+if ~exist([inputFileName.c2 ])==1
     set(handles.color2_name,'visible','on');
     set(handles.color2_name,'String',[inputFilePath.c2, inputFileName.c2]);
     if (ThreeD)
         IMG=imreadTiff([inputFilePath.c2, inputFileName.c2], (ThreeD));
-        disp=MG;
+        disp=IMG;
         displaying.c2=MIP(disp);
     else
         IMG=imreadTiff([inputFilePath.c2, inputFileName.c2]);
@@ -388,13 +388,13 @@ global displaying
 global inputFileName
 global inputFilePath
 n=1;
-[inputFileName.c3,  inputFilePath.c3, gfindex] = uigetfile({'*.*',  'All files'}, 'Select data file', '..\Data\Raw\');
+[inputFileName.c3,  inputFilePath.c3, gfindex] = uigetfile({'*.*',  'All files'}, 'Select data file', '.\Data\');
 
 if gfindex==0
     inputFilePath.c3 = '';
     inputFileName.c3= '';
 end
-if ~exist([inputFileName.c3 ])==0
+if ~exist([inputFileName.c3 ])==1
         set(handles.color3_name,'visible','on');
         set(handles.color3_name,'String',[inputFilePath.c3, inputFileName.c3]);
     if (ThreeD)
@@ -1411,34 +1411,40 @@ if (ThreeD)
     numcolor=length(fieldnames(inputFileName));
     displayingsum=zeros(size(displaying.c1,1),size(displaying.c1,2),3);
     for totalcolor=1:numcolor
-        displayingsum(:,:,1)=displayingsum(:,:,1)+eval(['color',num2str(totalcolor),'.R'])*eval(['displaying.c',num2str(totalcolor)])*eval(['color',num2str(totalcolor),'.gain']);
-        displayingsum(:,:,2)=displayingsum(:,:,2)+eval(['color',num2str(totalcolor),'.G'])*eval(['displaying.c',num2str(totalcolor)])*eval(['color',num2str(totalcolor),'.gain']);
-        displayingsum(:,:,3)=displayingsum(:,:,3)+eval(['color',num2str(totalcolor),'.B'])*eval(['displaying.c',num2str(totalcolor)])*eval(['color',num2str(totalcolor),'.gain']);
+        displayingsum(:,:,1)=displayingsum(:,:,1)+eval(['color',num2str(totalcolor),'.R'])*eval(['displaying.c',num2str(totalcolor)])...
+            *eval(['color',num2str(totalcolor),'.gain']).^eval(['color',num2str(totalcolor),'.gamma']);
+        displayingsum(:,:,2)=displayingsum(:,:,2)+eval(['color',num2str(totalcolor),'.G'])*eval(['displaying.c',num2str(totalcolor)])...
+            *eval(['color',num2str(totalcolor),'.gain']).^eval(['color',num2str(totalcolor),'.gamma']);
+        displayingsum(:,:,3)=displayingsum(:,:,3)+eval(['color',num2str(totalcolor),'.B'])*eval(['displaying.c',num2str(totalcolor)])...
+            *eval(['color',num2str(totalcolor),'.gain']).^eval(['color',num2str(totalcolor),'.gamma']);
     end
     imwrite(displayingsum,'\MulticolorData\ThreeD.tif');
 else
-    
-end
-numcolor=length(fieldnames(inputFileName));
-for totalcolor=1:numcolor
-    memory=imreadTiff([    eval(['inputFilePath.c',num2str(totalcolor)]),   eval(['inputFileName.c',num2str(totalcolor)])    ]);
-    eval(['IMGc',num2str(totalcolor),'=','memory;']);
-end
-%     IMGc1=imreadTiff([inputFilePath.c1, inputFileName.c1]);
-%     IMGc2=imreadTiff([inputFilePath.c2, inputFileName.c2]);
-%     IMGc3=imreadTiff([inputFilePath.c3, inputFileName.c3]);
-n=size(IMGc1,3);
-for i=1:n
-    displayingsum=zeros(size(displaying.c1,1),size(displaying.c1,2),3);
+    numcolor=length(fieldnames(inputFileName));
     for totalcolor=1:numcolor
-        dispmemory=eval(['IMGc',num2str(totalcolor)]);
-        disp{totalcolor}=dispmemory(:,:,i);
-        displayingsum(:,:,1)=displayingsum(:,:,1)+eval(['color',num2str(totalcolor),'.R'])*disp{totalcolor}*eval(['color',num2str(totalcolor),'.gain']);
-        displayingsum(:,:,2)=displayingsum(:,:,2)+eval(['color',num2str(totalcolor),'.G'])*disp{totalcolor}*eval(['color',num2str(totalcolor),'.gain']);
-        displayingsum(:,:,3)=displayingsum(:,:,3)+eval(['color',num2str(totalcolor),'.B'])*disp{totalcolor}*eval(['color',num2str(totalcolor),'.gain']);
+        memory=imreadTiff([    eval(['inputFilePath.c',num2str(totalcolor)]),   eval(['inputFileName.c',num2str(totalcolor)])    ]);
+        eval(['IMGc',num2str(totalcolor),'=','memory;']);
     end
-    imwrite(displayingsum,[filepath,'\TwoD','_frames_',int2str(i),'.tif']);
+    %     IMGc1=imreadTiff([inputFilePath.c1, inputFileName.c1]);
+    %     IMGc2=imreadTiff([inputFilePath.c2, inputFileName.c2]);
+    %     IMGc3=imreadTiff([inputFilePath.c3, inputFileName.c3]);
+    n=size(IMGc1,3);
+    for i=1:n
+        displayingsum=zeros(size(displaying.c1,1),size(displaying.c1,2),3);
+        for totalcolor=1:numcolor
+            dispmemory=eval(['IMGc',num2str(totalcolor)]);
+            disp{totalcolor}=dispmemory(:,:,i);
+            displayingsum(:,:,1)=displayingsum(:,:,1)+eval(['color',num2str(totalcolor),'.R'])*disp{totalcolor}...
+                *eval(['color',num2str(totalcolor),'.gain']).^eval(['color',num2str(totalcolor),'.gamma']);
+            displayingsum(:,:,2)=displayingsum(:,:,2)+eval(['color',num2str(totalcolor),'.G'])*disp{totalcolor}...
+                *eval(['color',num2str(totalcolor),'.gain']).^eval(['color',num2str(totalcolor),'.gamma']);
+            displayingsum(:,:,3)=displayingsum(:,:,3)+eval(['color',num2str(totalcolor),'.B'])*disp{totalcolor}...
+                *eval(['color',num2str(totalcolor),'.gain']).^eval(['color',num2str(totalcolor),'.gamma']);
+        end
+        imwrite(displayingsum,[filepath,'\TwoD','_frames_',int2str(i),'.tif']);
+    end
 end
+
 
 function save_file(filename)
 dirname=filename;
