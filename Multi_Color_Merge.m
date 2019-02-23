@@ -22,7 +22,7 @@ function varargout = Multi_Color_Merge(varargin)
 
 % Edit the above text to modify the response to help Multi_Color_Merge
 
-% Last Modified by GUIDE v2.5 21-Feb-2019 00:07:43
+% Last Modified by GUIDE v2.5 23-Feb-2019 23:13:40
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -290,8 +290,8 @@ function varargout = Multi_Color_Merge_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Read data%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%color1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % --- Executes on button press in color1.
 function color1_Callback(hObject, eventdata, handles)
 % hObject    handle to color1 (see GCBO)
@@ -303,7 +303,11 @@ clear global inputFileName
 % clear global color2
 % clear global color3
 clear global displaying
-
+I=zeros(100,100,3);
+I(:,:,2)=1;
+% I0=imread('HIT.jpg');
+% I=imresize(I0,[50,100]);
+set(handles.color1,'cdata',I);
 global color1;
 global color2;
 global color3;
@@ -336,7 +340,164 @@ if ~exist([inputFileName.c1 ])==1
 end
 
 
+% --- Executes on slider movement.
+function colorslider1_Callback(hObject, eventdata, handles)
+% hObject    handle to colorslider1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global color1;
+global color2;
+global color3;
+global inputFileName
+color1.R = get(hObject,'Value');
+global ThreeD
+global displaying
+set(handles.color1_R,'String',num2str(color1.R));
 
+displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles);
+
+
+% Hints: get(hObject,'Value') returns position of slider
+function colorslider1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to colorslider1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+%        to determine range of slider
+function colorslider1G_Callback(hObject, eventdata, handles)
+% hObject    handle to colorslider1G (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global color1;
+global color2;
+global color3;
+global inputFileName
+color1.G = get(hObject,'Value');
+global ThreeD
+global displaying
+set(handles.color1_G,'String',num2str(color1.G));
+
+displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function colorslider1G_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to colorslider1G (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+% --- Executes during object creation, after setting all properties.
+function colorslider1B_Callback(hObject, eventdata, handles)
+% hObject    handle to colorslider1B (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global color1;
+global color2;
+global color3;
+global inputFileName
+color1.B = get(hObject,'Value');
+global ThreeD
+global displaying
+set(handles.color1_B,'String',num2str(color1.B));
+
+displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function colorslider1B_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to colorslider1B (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+function gain1_Callback(hObject, eventdata, handles)
+% hObject    handle to gain1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global color1;
+global color2;
+global color3;
+global inputFileName
+ingain= get(hObject,'Value');
+color1.gain= 2^((10*ingain-5));
+global ThreeD
+global displaying
+set(handles.color1_gain,'String',num2str(color1.gain));
+
+displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function gain1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to gain1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+% --- Executes on slider movement.
+function gamma1_Callback(hObject, eventdata, handles)
+% hObject    handle to gamma1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global color1;
+global color2;
+global color3;
+global inputFileName
+color1.gamma = get(hObject,'Value');
+global ThreeD
+global displaying
+set(handles.color1_gamma,'String',num2str(color1.gamma));
+
+% displaying.c1=displaying.c1.^color1.gamma;
+% displaying.c1=displaying.c1./max(displaying.c1(:));
+displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function gamma1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to gamma1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%color2%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % --- Executes on button press in color2.
 
@@ -352,6 +513,11 @@ global displaying
 global inputFileName
 global inputFilePath
 n=1;
+I=zeros(100,100,3);
+I(:,:,2)=1;
+% I0=imread('HIT.jpg');
+% I=imresize(I0,[50,100]);
+set(handles.color2,'cdata',I);
 [inputFileName.c2,  inputFilePath.c2, gfindex] = uigetfile({'*.*',  'All files'}, 'Select data file', '.\Data\');
 
 if gfindex==0
@@ -373,76 +539,6 @@ if ~exist([inputFileName.c2 ])==1
     displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles);
 
 end
-
-
-% --- Executes on button press in color3.
-function color3_Callback(hObject, eventdata, handles)
-% hObject    handle to color3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global color1;
-global color2;
-global color3;
-global ThreeD
-global displaying
-global inputFileName
-global inputFilePath
-n=1;
-[inputFileName.c3,  inputFilePath.c3, gfindex] = uigetfile({'*.*',  'All files'}, 'Select data file', '.\Data\');
-
-if gfindex==0
-    inputFilePath.c3 = '';
-    inputFileName.c3= '';
-end
-if ~exist([inputFileName.c3 ])==1
-        set(handles.color3_name,'visible','on');
-        set(handles.color3_name,'String',[inputFilePath.c3, inputFileName.c3]);
-    if (ThreeD)
-        IMG=imreadTiff([inputFilePath.c3, inputFileName.c3], (ThreeD));
-        disp= IMG;
-        displaying.c3=MIP(disp);
-    else
-        IMG=imreadTiff([inputFilePath.c3, inputFileName.c3]);
-        disp=IMG;
-        displaying.c3=disp(:,:,n);
-    end
-    displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles);
-
-end
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Red %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% --- Executes on slider movement.
-function colorslider1_Callback(hObject, eventdata, handles)
-% hObject    handle to colorslider1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global color1;
-global color2;
-global color3;
-global inputFileName
-color1.R = get(hObject,'Value');
-global ThreeD
-global displaying
-set(handles.color1_R,'String',num2str(color1.R));
-
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles);
-% Hints: get(hObject,'Value') returns position of slider
-
-%        to determine range of slider
-
-
-% --- Executes during object creation, after setting all properties.
-function colorslider1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to colorslider1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: slider controls usually have a light gray background.
-if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor',[.9 .9 .9]);
-end
-
 
 
 % --- Executes on slider movement.
@@ -477,73 +573,6 @@ if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColo
 end
 
 % --- Executes on slider movement.
-function colorslider3_Callback(hObject, eventdata, handles)
-% hObject    handle to colorslider3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global color1;
-global color2;
-global color3;
-global inputFileName
-color3.R = get(hObject,'Value');
-global ThreeD
-global displaying
-set(handles.color3_B,'String',num2str(color3.B));
-
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
-
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-
-
-% --- Executes during object creation, after setting all properties.
-function colorslider3_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to colorslider3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: slider controls usually have a light gray background.
-if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor',[.9 .9 .9]);
-end
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Green %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% --- Executes on slider movement.
-function colorslider1G_Callback(hObject, eventdata, handles)
-% hObject    handle to colorslider1G (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global color1;
-global color2;
-global color3;
-global inputFileName
-color1.G = get(hObject,'Value');
-global ThreeD
-global displaying
-set(handles.color1_G,'String',num2str(color1.G));
-
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
-
-
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-
-
-% --- Executes during object creation, after setting all properties.
-function colorslider1G_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to colorslider1G (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: slider controls usually have a light gray background.
-if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor',[.9 .9 .9]);
-end
-
-
-% --- Executes on slider movement.
 function colorslider2G_Callback(hObject, eventdata, handles)
 % hObject    handle to colorslider2G (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -566,6 +595,180 @@ displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
 % --- Executes during object creation, after setting all properties.
 function colorslider2G_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to colorslider2G (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+% --- Executes on slider movement.
+
+% --- Executes on slider movement.
+function colorslider2B_Callback(hObject, eventdata, handles)
+% hObject    handle to colorslider2B (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global color1;
+global color2;
+global color3;
+global inputFileName
+color2.B = get(hObject,'Value');
+global ThreeD
+global displaying
+set(handles.color2_B,'String',num2str(color2.B));
+displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function colorslider2B_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to colorslider2B (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+% --- Executes on slider movement.
+
+
+function gain2_Callback(hObject, eventdata, handles)
+% hObject    handle to gain2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global color1;
+global color2;
+global color3;
+global inputFileName
+ingain2= get(hObject,'Value');
+color2.gain= 2^((10*ingain2-5));
+set(handles.color2_gain,'String',num2str(color2.gain));
+
+global ThreeD
+global displaying
+displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function gain2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to gain2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+
+% --- Executes on slider movement.
+function gamma2_Callback(hObject, eventdata, handles)
+% hObject    handle to gamma2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global color1;
+global color2;
+global color3;
+global inputFileName
+color2.gamma = get(hObject,'Value');
+global ThreeD
+global displaying
+% displaying.c1=displaying.c1.^color1.gamma;
+% displaying.c1=displaying.c1./max(displaying.c1(:));
+set(handles.color2_gamma,'String',num2str(color2.gamma));
+
+displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function gamma2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to gamma2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% color3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- Executes on button press in color3.
+function color3_Callback(hObject, eventdata, handles)
+% hObject    handle to color3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global color1;
+global color2;
+global color3;
+global ThreeD
+global displaying
+global inputFileName
+global inputFilePath
+n=1;
+I=zeros(100,100,3);
+I(:,:,2)=1;
+% I0=imread('HIT.jpg');
+% I=imresize(I0,[50,100]);
+set(handles.color3,'cdata',I);
+[inputFileName.c3,  inputFilePath.c3, gfindex] = uigetfile({'*.*',  'All files'}, 'Select data file', '.\Data\');
+
+if gfindex==0
+    inputFilePath.c3 = '';
+    inputFileName.c3= '';
+end
+if ~exist([inputFileName.c3 ])==1
+        set(handles.color3_name,'visible','on');
+        set(handles.color3_name,'String',[inputFilePath.c3, inputFileName.c3]);
+    if (ThreeD)
+        IMG=imreadTiff([inputFilePath.c3, inputFileName.c3], (ThreeD));
+        disp= IMG;
+        displaying.c3=MIP(disp);
+    else
+        IMG=imreadTiff([inputFilePath.c3, inputFileName.c3]);
+        disp=IMG;
+        displaying.c3=disp(:,:,n);
+    end
+    displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles);
+
+end
+
+
+% --- Executes on slider movement.
+function colorslider3_Callback(hObject, eventdata, handles)
+% hObject    handle to colorslider3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global color1;
+global color2;
+global color3;
+global inputFileName
+color3.R = get(hObject,'Value');
+global ThreeD
+global displaying
+set(handles.color3_R,'String',num2str(color3.R));
+
+displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function colorslider3_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to colorslider3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -608,66 +811,6 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Blue %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % --- Executes on slider movement.
-function colorslider1B_Callback(hObject, eventdata, handles)
-% hObject    handle to colorslider1B (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global color1;
-global color2;
-global color3;
-global inputFileName
-color1.B = get(hObject,'Value');
-global ThreeD
-global displaying
-set(handles.color1_B,'String',num2str(color1.B));
-
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
-
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-
-
-% --- Executes during object creation, after setting all properties.
-function colorslider1B_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to colorslider1B (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: slider controls usually have a light gray background.
-if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor',[.9 .9 .9]);
-end
-
-
-% --- Executes on slider movement.
-function colorslider2B_Callback(hObject, eventdata, handles)
-% hObject    handle to colorslider2B (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global color1;
-global color2;
-global color3;
-global inputFileName
-color2.B = get(hObject,'Value');
-global ThreeD
-global displaying
-set(handles.color2_B,'String',num2str(color2.B));
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
-
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-
-
-% --- Executes during object creation, after setting all properties.
-function colorslider2B_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to colorslider2B (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: slider controls usually have a light gray background.
-if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor',[.9 .9 .9]);
-end
 
 
 % --- Executes on slider movement.
@@ -700,70 +843,6 @@ if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColo
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% GAIN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% --- Executes on slider movement.
-function gain1_Callback(hObject, eventdata, handles)
-% hObject    handle to gain1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global color1;
-global color2;
-global color3;
-global inputFileName
-ingain= get(hObject,'Value');
-color1.gain= 2^((10*ingain-5));
-global ThreeD
-global displaying
-set(handles.color1_gain,'String',num2str(color1.gain));
-
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
-
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-
-
-% --- Executes during object creation, after setting all properties.
-function gain1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to gain1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: slider controls usually have a light gray background.
-if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor',[.9 .9 .9]);
-end
-
-function gain2_Callback(hObject, eventdata, handles)
-% hObject    handle to gain2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global color1;
-global color2;
-global color3;
-global inputFileName
-ingain2= get(hObject,'Value');
-color2.gain= 2^((10*ingain2-5));
-set(handles.color2_gain,'String',num2str(color2.gain));
-
-global ThreeD
-global displaying
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-
-
-% --- Executes during object creation, after setting all properties.
-function gain2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to gain2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: slider controls usually have a light gray background.
-if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor',[.9 .9 .9]);
-end
-
 
 % --- Executes on slider movement.
 function gain3_Callback(hObject, eventdata, handles)
@@ -788,114 +867,6 @@ displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
 % --- Executes during object creation, after setting all properties.
 function gain3_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to gain3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: slider controls usually have a light gray background.
-if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor',[.9 .9 .9]);
-end
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% GAMMA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% --- Executes on slider movement.
-function gamma1_Callback(hObject, eventdata, handles)
-% hObject    handle to gamma1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global color1;
-global color2;
-global color3;
-global inputFileName
-color1.gamma = get(hObject,'Value');
-global ThreeD
-global displaying
-set(handles.color1_gamma,'String',num2str(color1.gamma));
-
-% displaying.c1=displaying.c1.^color1.gamma;
-% displaying.c1=displaying.c1./max(displaying.c1(:));
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
-
-
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-
-
-% --- Executes during object creation, after setting all properties.
-function gamma1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to gamma1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: slider controls usually have a light gray background.
-if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor',[.9 .9 .9]);
-end
-
-
-% --- Executes on button press in Save.
-function Save_Callback(hObject, eventdata, handles)
-% hObject    handle to Save (see GCBO)
-readState(handles);
-checkState(handles);
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --- Executes on button press in ThreeD.
-function ThreeD_Callback(hObject, eventdata, handles)
-% hObject    handle to ThreeD (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global ThreeD;
-global color1;
-global color2;
-global color3;
-global inputFileName
-if (((get(hObject,'Value') == get(hObject,'Max'))))
-    ThreeD = 1;
-else
-    ThreeD = 0;
-end
-
-numcolor=length(fieldnames(displaying));
-
-% for i=1:numcolor
-%     global eval(['color',num2str(totalcolor)]);
-% end
-global displaying
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
-% Hint: get(hObject,'Value') returns toggle state of ThreeD
-
-
-
-
-
-% --- Executes on slider movement.
-function gamma2_Callback(hObject, eventdata, handles)
-% hObject    handle to gamma2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global color1;
-global color2;
-global color3;
-global inputFileName
-color2.gamma = get(hObject,'Value');
-global ThreeD
-global displaying
-% displaying.c1=displaying.c1.^color1.gamma;
-% displaying.c1=displaying.c1./max(displaying.c1(:));
-set(handles.color2_gamma,'String',num2str(color2.gamma));
-
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-
-
-% --- Executes during object creation, after setting all properties.
-function gamma2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to gamma2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -937,9 +908,49 @@ if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColo
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
 
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%others%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- Executes on button press in Save.
+function Save_Callback(hObject, eventdata, handles)
 
+% hObject    handle to Save (see GCBO)
+readState(handles);
+checkState(handles);
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 
+function figure1_SizeChangedFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 
+% --- Executes on button press in ThreeD.
+function ThreeD_Callback(hObject, eventdata, handles)
+% hObject    handle to ThreeD (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global ThreeD;
+global color1;
+global color2;
+global color3;
+global inputFileName
+if (((get(hObject,'Value') == get(hObject,'Max'))))
+    ThreeD = 1;
+else
+    ThreeD = 0;
+end
+
+numcolor=length(fieldnames(displaying));
+
+% for i=1:numcolor
+%     global eval(['color',num2str(totalcolor)]);
+% end
+global displaying
+displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+% Hint: get(hObject,'Value') returns toggle state of ThreeD
+
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%display%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function color1_name_Callback(hObject, eventdata, handles)
 % hObject    handle to color1_name (see GCBO)
@@ -1355,7 +1366,7 @@ end
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%CORE%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function displaying=MIP(disp)
 for i=1:size(color1.IMG,1)
     for j=1:size(color1.IMG,2)
@@ -1477,7 +1488,3 @@ else
         stack(:,:,k)=stack(:,:,k)./max(max(stack(:,:,k)));
     end
 end
-
-
-
-
