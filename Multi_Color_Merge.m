@@ -916,6 +916,9 @@ function Save_Callback(hObject, eventdata, handles)
 % hObject    handle to Save (see GCBO)
 readState(handles);
 checkState(handles);
+I=zeros(100,100,3);
+I(:,:,2)=1;
+set(handles.Save,'cdata',I);
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
