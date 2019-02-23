@@ -4,4 +4,4 @@
 </p>
 
 #### This tool can adjust the three color channel component (RGB), the GAIN (the brightness to display) and also the gamma to adjust the histogram to make images more 'naturally'.
-###It will be extended to 7 color channels in future !
+### It will be extended to 7 color channels in future !
