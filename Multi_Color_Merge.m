@@ -114,33 +114,33 @@ if exist(fileName)
     
     load(fileName);
     set(handles.ThreeD,'Value', ThreeD );
-    set(handles.gain1,'Value',ingain1);
-    color1.gain=2^(10*ingain1-5);
+    set(handles.gain1,'Value',(log2(color1.gain)+5)/10);
+%     color1.gain=2^(10*ingain1-5);
     set(handles.gamma1,'Value',color1.gamma);
     set(handles.colorslider1,'Value',color1.R);
     set(handles.colorslider1G,'Value',color1.G);
     set(handles.colorslider1B,'Value',color1.B);
     
-    set(handles.gain2,'Value',ingain2);
+    set(handles.gain2,'Value',(log2(color2.gain)+5)/10);
     set(handles.gamma2,'Value',color2.gamma);
     set(handles.colorslider2,'Value',color2.R);
     set(handles.colorslider2G,'Value',color2.G);
     set(handles.colorslider2B,'Value',color2.B);
-    color2.gain=2^(10*ingain2-5);
+%     color2.gain=2^(10*ingain2-5);
     
-    set(handles.gain3,'Value',ingain3);
+    set(handles.gain3,'Value',(log2(color3.gain)+5)/10);
     set(handles.gamma3,'Value',color3.gamma);
     set(handles.colorslider3,'Value',color3.R);
     set(handles.colorslider3G,'Value',color3.G);
     set(handles.colorslider3B,'Value',color3.B);
-    color3.gain=2^(10*ingain3-5);
+%     color3.gain=2^(10*ingain3-5);
     
-    set(handles.gain4,'Value',ingain4);
+    set(handles.gain4,'Value',(log2(color4.gain)+5)/10);
     set(handles.gamma4,'Value',color4.gamma);
     set(handles.colorslider4,'Value',color4.R);
     set(handles.colorslider4G,'Value',color4.G);
     set(handles.colorslider4B,'Value',color4.B);
-    color4.gain=2^(10*ingain4-5);
+%     color4.gain=2^(10*ingain4-5);
 else
     
     set(handles.ThreeD,'Value',0);
@@ -1197,14 +1197,13 @@ global ThreeD;
 global color1;
 global color2;
 global color3;
+global color4;
 global inputFileName
 if (((get(hObject,'Value') == get(hObject,'Max'))))
     ThreeD = 1;
 else
     ThreeD = 0;
 end
-
-numcolor=length(fieldnames(displaying));
 
 % for i=1:numcolor
 %     global eval(['color',num2str(totalcolor)]);
