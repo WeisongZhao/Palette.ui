@@ -22,7 +22,7 @@ function varargout = Multi_Color_Merge(varargin)
 
 % Edit the above text to modify the response to help Multi_Color_Merge
 
-% Last Modified by GUIDE v2.5 23-Feb-2019 23:13:40
+% Last Modified by GUIDE v2.5 16-Mar-2019 20:05:54
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -49,40 +49,46 @@ function saveState(handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global ThreeD;
 
 fileName = '.\RUN\para.mat';
 ThreeD = get(handles.ThreeD,'Value' );
-ingain= get(handles.gain1,'Value' );
-color1.gain=2^((10* ingain-5));
+ingain1= get(handles.gain1,'Value' );
+color1.gain=2^((10* ingain1-5));
 
 color1.gamma= get(handles.gamma1,'Value' );
 color1.R= get(handles.colorslider1,'Value' );
 color1.G= get(handles.colorslider1G,'Value' );
 color1.B= get(handles.colorslider1B,'Value' );
 
-ingain= get(handles.gain2,'Value' );
-color2.gain=2^((10* ingain-5));
+ingain2= get(handles.gain2,'Value' );
+color2.gain=2^((10* ingain2-5));
 color2.gamma= get(handles.gamma2,'Value' );
 color2.R= get(handles.colorslider2,'Value' );
 color2.G= get(handles.colorslider2G,'Value' );
 color2.B= get(handles.colorslider2B,'Value' );
 
-ingain= get(handles.gain3,'Value' );
-color3.gain=2^((10* ingain-5));
+ingain3= get(handles.gain3,'Value' );
+color3.gain=2^((10* ingain3-5));
 color3.gamma= get(handles.gamma3,'Value' );
 color3.R= get(handles.colorslider3,'Value' );
 color3.G= get(handles.colorslider3G,'Value' );
 color3.B= get(handles.colorslider3B,'Value' );
 
-
+ingain4= get(handles.gain4,'Value' );
+color4.gain=2^((10* ingain4-5));
+color4.gamma= get(handles.gamma3,'Value' );
+color4.R= get(handles.colorslider3,'Value' );
+color4.G= get(handles.colorslider3G,'Value' );
+color4.B= get(handles.colorslider3B,'Value' );
 
 
 if ~exist('.\RUN','dir')==1
     save_file('.\RUN');
 end
 
-save(fileName, 'color1','color2','color3','ThreeD');
+save(fileName, 'color1','color2','color3','color4','ThreeD');
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -92,37 +98,49 @@ function loadState(handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global ThreeD;
 % color1.IMG = zeros(10,10);
 color1.gain = 1;
 color2.gain = 1;
 color3.gain= 1;
+color4.gain= 1;
 fileName = '.\RUN\para.mat';
-ingain=0.5;
+ingain1=0.5;
+ingain2=0.5;
+ingain3=0.5;
+ingain4=0.5;
 if exist(fileName)
     
     load(fileName);
     set(handles.ThreeD,'Value', ThreeD );
-    set(handles.gain1,'Value',ingain);
-    color1.gain=2^(10*ingain-5);
+    set(handles.gain1,'Value',ingain1);
+    color1.gain=2^(10*ingain1-5);
     set(handles.gamma1,'Value',color1.gamma);
     set(handles.colorslider1,'Value',color1.R);
     set(handles.colorslider1G,'Value',color1.G);
     set(handles.colorslider1B,'Value',color1.B);
     
-    set(handles.gain2,'Value',ingain);
+    set(handles.gain2,'Value',ingain2);
     set(handles.gamma2,'Value',color2.gamma);
     set(handles.colorslider2,'Value',color2.R);
     set(handles.colorslider2G,'Value',color2.G);
     set(handles.colorslider2B,'Value',color2.B);
-    color2.gain=2^(10*ingain-5);
+    color2.gain=2^(10*ingain2-5);
     
-    set(handles.gain3,'Value',ingain);
+    set(handles.gain3,'Value',ingain3);
     set(handles.gamma3,'Value',color3.gamma);
     set(handles.colorslider3,'Value',color3.R);
     set(handles.colorslider3G,'Value',color3.G);
     set(handles.colorslider3B,'Value',color3.B);
-    color2.gain=2^(10*ingain-5);
+    color3.gain=2^(10*ingain3-5);
+    
+    set(handles.gain4,'Value',ingain4);
+    set(handles.gamma4,'Value',color4.gamma);
+    set(handles.colorslider4,'Value',color4.R);
+    set(handles.colorslider4G,'Value',color4.G);
+    set(handles.colorslider4B,'Value',color4.B);
+    color4.gain=2^(10*ingain4-5);
 else
     
     set(handles.ThreeD,'Value',0);
@@ -145,6 +163,12 @@ else
     set(handles.colorslider3,'Value',0);
     set(handles.colorslider3G,'Value',0);
     set(handles.colorslider3B,'Value',1);
+    
+    set(handles.gamma4,'Value', 1 );
+    set(handles.gain4,'Value', 0.5 );
+    set(handles.colorslider4,'Value',1);
+    set(handles.colorslider4G,'Value',0);
+    set(handles.colorslider4B,'Value',1);
 end
 saveState(handles);
 
@@ -158,32 +182,38 @@ function readState(handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global ThreeD;
 
 ThreeD = get(handles.ThreeD,'Value' );
 
-ingain = get(handles.gain1,'Value' );
-color1.gain=2^(10*ingain-5);
+ingain1 = get(handles.gain1,'Value' );
+color1.gain=2^(10*ingain1-5);
 color1.gamma = get(handles.gamma1,'Value' );
 color1.R = get(handles.colorslider1,'Value' );
 color1.G= get(handles.colorslider1G,'Value' );
 color1.B = get(handles.colorslider1B,'Value' );
 
-ingain = get(handles.gain2,'Value' );
-color2.gain=2^(10*ingain-5);
+ingain2 = get(handles.gain2,'Value' );
+color2.gain=2^(10*ingain2-5);
 color2.gamma = get(handles.gamma2,'Value' );
 color2.R = get(handles.colorslider2,'Value' );
 color2.G= get(handles.colorslider2G,'Value' );
 color2.B = get(handles.colorslider2B,'Value' );
 
-ingain = get(handles.gain3,'Value' );
-color3.gain=2^(10*ingain-5);
+ingain3 = get(handles.gain3,'Value' );
+color3.gain=2^(10*ingain3-5);
 color3.gamma = get(handles.gamma3,'Value' );
 color3.R = get(handles.colorslider3,'Value' );
 color3.G= get(handles.colorslider3G,'Value' );
 color3.B = get(handles.colorslider3B,'Value' );
 
-
+ingain4 = get(handles.gain4,'Value' );
+color4.gain=2^(10*ingain4-5);
+color4.gamma = get(handles.gamma4,'Value' );
+color4.R = get(handles.colorslider4,'Value' );
+color4.G= get(handles.colorslider4G,'Value' );
+color4.B = get(handles.colorslider4B,'Value' );
 
 
 
@@ -198,6 +228,7 @@ function checkState(handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global displaying
 global ThreeD
 global inputFilePath
@@ -213,7 +244,7 @@ color1.check = 1;
 
 if (color1.check>0)
     saveState(handles);
-    Savedata(color1,color2,color3,inputFileName,inputFilePath,displaying,ThreeD);
+    Savedata(color1,color2,color3, color4,inputFileName,inputFilePath,displaying,ThreeD);
 else
     disp('Retry after changing the variables according to the message !');
 end
@@ -247,10 +278,13 @@ loadState(handles);
 set(handles.color1_name,'visible','off');
 set(handles.color2_name,'visible','off');
 set(handles.color3_name,'visible','off');
+set(handles.color4_name,'visible','off');
 
 global color1;
 global color2;
 global color3;
+global color4;
+
 set(handles.color1_R,'String',num2str(color1.R));
 set(handles.color1_G,'String',num2str(color1.G));
 set(handles.color1_B,'String',num2str(color1.B));
@@ -269,6 +303,11 @@ set(handles.color3_B,'String',num2str(color3.B));
 set(handles.color3_gain,'String',num2str(color3.gain));
 set(handles.color3_gamma,'String',num2str(color3.gamma));
 
+set(handles.color4_R,'String',num2str(color4.R));
+set(handles.color4_G,'String',num2str(color4.G));
+set(handles.color4_B,'String',num2str(color4.B));
+set(handles.color4_gain,'String',num2str(color4.gain));
+set(handles.color4_gamma,'String',num2str(color4.gamma));
 
 
 
@@ -311,6 +350,7 @@ set(handles.color1,'cdata',I);
 global color1;
 global color2;
 global color3;
+global color4;
 global ThreeD
 global displaying
 global inputFileName
@@ -336,7 +376,7 @@ if ~exist([inputFileName.c1 ])==1
         disp= IMG;
         displaying.c1=disp(:,:,n);
     end
-    displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+    displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
 end
 
 
@@ -348,13 +388,14 @@ function colorslider1_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global inputFileName
 color1.R = get(hObject,'Value');
 global ThreeD
 global displaying
 set(handles.color1_R,'String',num2str(color1.R));
 
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles);
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);;
 
 
 % Hints: get(hObject,'Value') returns position of slider
@@ -376,13 +417,14 @@ function colorslider1G_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global inputFileName
 color1.G = get(hObject,'Value');
 global ThreeD
 global displaying
 set(handles.color1_G,'String',num2str(color1.G));
 
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
 
 
 % Hints: get(hObject,'Value') returns position of slider
@@ -408,13 +450,14 @@ function colorslider1B_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global inputFileName
 color1.B = get(hObject,'Value');
 global ThreeD
 global displaying
 set(handles.color1_B,'String',num2str(color1.B));
 
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
@@ -439,6 +482,7 @@ function gain1_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global inputFileName
 ingain= get(hObject,'Value');
 color1.gain= 2^((10*ingain-5));
@@ -446,7 +490,7 @@ global ThreeD
 global displaying
 set(handles.color1_gain,'String',num2str(color1.gain));
 
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
@@ -471,6 +515,7 @@ function gamma1_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global inputFileName
 color1.gamma = get(hObject,'Value');
 global ThreeD
@@ -479,7 +524,7 @@ set(handles.color1_gamma,'String',num2str(color1.gamma));
 
 % displaying.c1=displaying.c1.^color1.gamma;
 % displaying.c1=displaying.c1./max(displaying.c1(:));
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
 
 
 % Hints: get(hObject,'Value') returns position of slider
@@ -508,6 +553,7 @@ function color2_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global ThreeD
 global displaying
 global inputFileName
@@ -536,7 +582,7 @@ if ~exist([inputFileName.c2 ])==1
         disp= IMG;
         displaying.c2=disp(:,:,n);
     end
-    displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles);
+    displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);;
 
 end
 
@@ -549,13 +595,14 @@ function colorslider2_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 color2.R = get(hObject,'Value');
 global inputFileName
 global ThreeD
 global displaying
 set(handles.color2_R,'String',num2str(color2.R));
 
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
@@ -580,13 +627,14 @@ function colorslider2G_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global inputFileName
 color2.G = get(hObject,'Value');
 global ThreeD
 global displaying
 set(handles.color2_G,'String',num2str(color2.G));
 
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
@@ -614,12 +662,13 @@ function colorslider2B_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global inputFileName
 color2.B = get(hObject,'Value');
 global ThreeD
 global displaying
 set(handles.color2_B,'String',num2str(color2.B));
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
@@ -645,6 +694,7 @@ function gain2_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global inputFileName
 ingain2= get(hObject,'Value');
 color2.gain= 2^((10*ingain2-5));
@@ -652,7 +702,7 @@ set(handles.color2_gain,'String',num2str(color2.gain));
 
 global ThreeD
 global displaying
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 
@@ -678,6 +728,7 @@ function gamma2_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global inputFileName
 color2.gamma = get(hObject,'Value');
 global ThreeD
@@ -686,7 +737,7 @@ global displaying
 % displaying.c1=displaying.c1./max(displaying.c1(:));
 set(handles.color2_gamma,'String',num2str(color2.gamma));
 
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 
@@ -713,6 +764,7 @@ function color3_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global ThreeD
 global displaying
 global inputFileName
@@ -741,7 +793,7 @@ if ~exist([inputFileName.c3 ])==1
         disp=IMG;
         displaying.c3=disp(:,:,n);
     end
-    displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles);
+    displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);;
 
 end
 
@@ -754,13 +806,14 @@ function colorslider3_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global inputFileName
 color3.R = get(hObject,'Value');
 global ThreeD
 global displaying
 set(handles.color3_R,'String',num2str(color3.R));
 
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
@@ -786,12 +839,13 @@ function colorslider3G_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global inputFileName
 color3.G = get(hObject,'Value');
 global ThreeD
 global displaying
 set(handles.color3_G,'String',num2str(color3.G));
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
@@ -808,7 +862,6 @@ if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColo
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Blue %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % --- Executes on slider movement.
 
@@ -821,12 +874,13 @@ function colorslider3B_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global inputFileName
 color3.B = get(hObject,'Value');
 global ThreeD
 global displaying
 set(handles.color3_B,'String',num2str(color3.B));
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
@@ -852,6 +906,7 @@ function gain3_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global inputFileName
 ingain3= get(hObject,'Value');
 color3.gain= 2^((10*ingain3-5));
@@ -859,7 +914,7 @@ set(handles.color3_gain,'String',num2str(color3.gain));
 
 global ThreeD
 global displaying
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 
@@ -884,6 +939,7 @@ function gamma3_Callback(hObject, eventdata, handles)
 global color1;
 global color2;
 global color3;
+global color4;
 global inputFileName
 color3.gamma = get(hObject,'Value');
 global ThreeD
@@ -892,7 +948,7 @@ set(handles.color3_gamma,'String',num2str(color3.gamma));
 
 % displaying.c1=displaying.c1.^color1.gamma;
 % displaying.c1=displaying.c1./max(displaying.c1(:));
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 
@@ -900,6 +956,211 @@ displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
 % --- Executes during object creation, after setting all properties.
 function gamma3_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to gamma3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%color4%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- Executes on button press in color4.
+function color4_Callback(hObject, eventdata, handles)
+% hObject    handle to color4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global color1;
+global color2;
+global color3;
+global color4;
+global ThreeD
+global displaying
+global inputFileName
+global inputFilePath
+n=1;
+I=zeros(100,100,3);
+I(:,:,2)=1;
+% I0=imread('HIT.jpg');
+% I=imresize(I0,[50,100]);
+set(handles.color4,'cdata',I);
+[inputFileName.c4,  inputFilePath.c4, gfindex] = uigetfile({'*.*',  'All files'}, 'Select data file', '.\Data\');
+
+if gfindex==0
+    inputFilePath.c4 = '';
+    inputFileName.c4= '';
+end
+if ~exist([inputFileName.c4 ])==1
+        set(handles.color4_name,'visible','on');
+        set(handles.color4_name,'String',[inputFilePath.c4, inputFileName.c4]);
+    if (ThreeD)
+        IMG=imreadTiff([inputFilePath.c4, inputFileName.c4], (ThreeD));
+        disp= IMG;
+        displaying.c4=MIP(disp);
+    else
+        IMG=imreadTiff([inputFilePath.c4, inputFileName.c4]);
+        disp=IMG;
+        displaying.c4=disp(:,:,n);
+    end
+    displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
+
+end
+
+
+% --- Executes on slider movement.
+function colorslider4_Callback(hObject, eventdata, handles)
+% hObject    handle to colorslider4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global color1;
+global color2;
+global color3;
+global color4;
+global inputFileName
+color4.R = get(hObject,'Value');
+global ThreeD
+global displaying
+set(handles.color4_R,'String',num2str(color4.R));
+
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function colorslider4_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to colorslider4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+% --- Executes on slider movement.
+function colorslider4G_Callback(hObject, eventdata, handles)
+% hObject    handle to colorslider4G (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global color1;
+global color2;
+global color3;
+global color4;
+global inputFileName
+color4.G = get(hObject,'Value');
+global ThreeD
+global displaying
+set(handles.color4_G,'String',num2str(color4.G));
+
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function colorslider4G_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to colorslider4G (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+% --- Executes on slider movement.
+function colorslider4B_Callback(hObject, eventdata, handles)
+% hObject    handle to colorslider4B (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global color1;
+global color2;
+global color3;
+global color4;
+global inputFileName
+color4.B = get(hObject,'Value');
+global ThreeD
+global displaying
+set(handles.color4_B,'String',num2str(color4.B));
+
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function colorslider4B_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to colorslider4B (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+% --- Executes on slider movement.
+function gain4_Callback(hObject, eventdata, handles)
+% hObject    handle to gain4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global color1;
+global color2;
+global color3;
+global color4;
+global inputFileName
+global ThreeD
+global displaying
+ingain4= get(hObject,'Value');
+color4.gain= 2^((10*ingain4-5));
+set(handles.color4_gain,'String',num2str(color4.gain));
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function gain4_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to gain4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+% --- Executes on slider movement.
+function gamma4_Callback(hObject, eventdata, handles)
+% hObject    handle to gamma4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global color1;
+global color2;
+global color3;
+global color4;
+global inputFileName
+color4.gamma = get(hObject,'Value');
+global ThreeD
+global displaying
+set(handles.color4_gamma,'String',num2str(color4.gamma));
+% displaying.c1=displaying.c1.^color1.gamma;
+% displaying.c1=displaying.c1./max(displaying.c1(:));
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function gamma4_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to gamma4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -949,8 +1210,9 @@ numcolor=length(fieldnames(displaying));
 %     global eval(['color',num2str(totalcolor)]);
 % end
 global displaying
-displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles);
 % Hint: get(hObject,'Value') returns toggle state of ThreeD
+
 
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%display%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -967,52 +1229,6 @@ function color1_name_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function color1_name_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to color1_name (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-
-function color2_name_Callback(hObject, eventdata, handles)
-% hObject    handle to color2_name (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of color2_name as text
-%        str2double(get(hObject,'String')) returns contents of color2_name as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function color2_name_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to color2_name (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-
-function color3_name_Callback(hObject, eventdata, handles)
-% hObject    handle to color3_name (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of color3_name as text
-%        str2double(get(hObject,'String')) returns contents of color3_name as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function color3_name_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to color3_name (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -1136,7 +1352,27 @@ function color1_gamma_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%color2%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function color2_name_Callback(hObject, eventdata, handles)
+% hObject    handle to color2_name (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 
+% Hints: get(hObject,'String') returns contents of color2_name as text
+%        str2double(get(hObject,'String')) returns contents of color2_name as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function color2_name_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to color2_name (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
 
 
 function color2_R_Callback(hObject, eventdata, handles)
@@ -1254,6 +1490,30 @@ end
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%color3%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+function color3_name_Callback(hObject, eventdata, handles)
+% hObject    handle to color3_name (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of color3_name as text
+%        str2double(get(hObject,'String')) returns contents of color3_name as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function color3_name_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to color3_name (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
 function color3_R_Callback(hObject, eventdata, handles)
 % hObject    handle to color3_R (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -1366,7 +1626,143 @@ function color3_gamma_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%color 4%%%%%%%%%%%%%%%%%%%%%%%%
 
+function color4_name_Callback(hObject, eventdata, handles)
+% hObject    handle to color4_name (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of color4_name as text
+%        str2double(get(hObject,'String')) returns contents of color4_name as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function color4_name_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to color4_name (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function color4_R_Callback(hObject, eventdata, handles)
+% hObject    handle to color4_R (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of color4_R as text
+%        str2double(get(hObject,'String')) returns contents of color4_R as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function color4_R_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to color4_R (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function color4_G_Callback(hObject, eventdata, handles)
+% hObject    handle to color4_G (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of color4_G as text
+%        str2double(get(hObject,'String')) returns contents of color4_G as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function color4_G_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to color4_G (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function color4_B_Callback(hObject, eventdata, handles)
+% hObject    handle to color4_B (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of color4_B as text
+%        str2double(get(hObject,'String')) returns contents of color4_B as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function color4_B_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to color4_B (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function color4_gain_Callback(hObject, eventdata, handles)
+% hObject    handle to color4_gain (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of color4_gain as text
+%        str2double(get(hObject,'String')) returns contents of color4_gain as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function color4_gain_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to color4_gain (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function color4_gamma_Callback(hObject, eventdata, handles)
+% hObject    handle to color4_gamma (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of color4_gamma as text
+%        str2double(get(hObject,'String')) returns contents of color4_gamma as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function color4_gamma_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to color4_gamma (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%CORE%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1377,7 +1773,7 @@ for i=1:size(color1.IMG,1)
     end
 end
 
-function displayThecolor (color1,color2,color3,displaying,inputFileName,ThreeD,handles)
+function displayThecolor (color1,color2,color3,color4,displaying,inputFileName,ThreeD,handles)
 % if (ThreeD)
 numcolor=length(fieldnames(inputFileName));
 displayingsum=zeros(size(displaying.c1,1),size(displaying.c1,2),3);
@@ -1406,7 +1802,7 @@ imshow(displayingsum,'Parent', handles.Figure);
 % end
 % imwrite(displayingsum,['t.tif']);
 
-function Savedata(color1,color2,color3,inputFileName,inputFilePath,displaying,ThreeD)
+function Savedata(color1,color2,color3,color4,inputFileName,inputFilePath,displaying,ThreeD)
 warning off
 if ~exist('.\MulticolorData','dir')==1
     save_file('.\MulticolorData');
@@ -1491,3 +1887,10 @@ else
         stack(:,:,k)=stack(:,:,k)./max(max(stack(:,:,k)));
     end
 end
+
+
+
+
+
+
+
