@@ -79,9 +79,9 @@ color3.B= get(handles.colorslider3B,'Value' );
 ingain4= get(handles.gain4,'Value' );
 color4.gain=2^((10* ingain4-5));
 color4.gamma= get(handles.gamma3,'Value' );
-color4.R= get(handles.colorslider3,'Value' );
-color4.G= get(handles.colorslider3G,'Value' );
-color4.B= get(handles.colorslider3B,'Value' );
+color4.R= get(handles.colorslider4,'Value' );
+color4.G= get(handles.colorslider4G,'Value' );
+color4.B= get(handles.colorslider4B,'Value' );
 
 
 if ~exist('.\RUN','dir')==1
