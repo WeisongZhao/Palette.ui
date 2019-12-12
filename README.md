@@ -1,4 +1,4 @@
-# Merge Channel: A tool for multi-color 2D or 3D imaging
+# Merge channels: A tool for multi-color 2D or 3D imaging
 <p align='center'>
     <img src='img/1.png' width='1000'/>
 </p>
